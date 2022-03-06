@@ -115,8 +115,17 @@ func SetDigits(char1, char2, char3, char4, char5, char6, char7, char8, char9, ch
 
 // SetLCD sets the text (an ASCII string) found on the LCD starting from the specified offset.
 func SetLCD(lcd Channel, colorData byte, line1, line2 string) midi.Message {
-	if len(line1+line2) != 14 {
-		return nil
+	for len(line1) < 7 {
+		line1 += " "
+	}
+	for len(line2) < 7 {
+		line2 += " "
+	}
+	if len(line1) > 7 {
+		line1 = line1[:7]
+	}
+	if len(line2) > 7 {
+		line2 = line2[:7]
 	}
 	return sysex.SysEx(append(append(header, 0x4c, LCDs[lcd], colorData), line1+line2...))
 }
